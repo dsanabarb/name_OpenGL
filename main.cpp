@@ -1,11 +1,26 @@
 /*
+ * Project 1 - Modelagem 3D
  * Writing my name
  * github.com/dsanabarb
  */
 
+ //glutKeyboardFunc -> ASCII
+ //glutSpecialFunc -> GLUT_KEY_F1
+
 #include <GL/freeglut.h>
+#include <GL/glut.h>
+#include <stdlib.h>
+#include <iostream>
+
+
+GLfloat escala = 1.5;
+    float Tx = 0;
+    float Ty = 0;
+    float angulo = 0;
+
 
 void draw (void) {
+
     glClear (GL_COLOR_BUFFER_BIT);
 
     glMatrixMode (GL_PROJECTION);
@@ -15,6 +30,11 @@ void draw (void) {
 
     glMatrixMode (GL_MODELVIEW);
     glLoadIdentity();
+
+    glScalef (escala, escala, 0);
+    glTranslated (Tx, Ty, 0);
+    glRotatef (angulo, 0, 0, 1);
+
 
     //D
     glBegin (GL_LINE_LOOP);
@@ -67,12 +87,35 @@ void draw (void) {
      glFlush ();
 }
 
+void listeningKey (unsigned char tecla, GLint x, GLint y) {
+        switch (tecla) {
+            case '+' : escala += 0.1;
+                break;
+            case '-' : if (escala >= 0.10) escala -= 0.1;
+                break;
+            case 'd' : Tx += 0.5;
+                break;
+            case 'a' : Tx -= 0.5;
+                break;
+            case 'w' : Ty += 0.5;
+                break;
+            case 's' : Ty -= 0.5;
+                break;
+            case 'q' : angulo += 0.5;
+                break;
+            case 'e' : angulo -= 0.5;
+                break;
+        }
+        draw();
+}
 
-int main (int argc, char* argv [] ) {
+
+int main (int argc, char* argv [ ] ) {
     glutInit (&argc, argv);
     glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB);
-    glutInitWindowSize (800, 400);
+    glutInitWindowSize (900, 500);
     glutCreateWindow ("Hello, World! My name is");
+    glutKeyboardFunc (listeningKey);
     glutDisplayFunc (draw);
     glClearColor (0, 0.3, 0, 0);
     glutMainLoop();
